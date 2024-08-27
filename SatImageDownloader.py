@@ -71,12 +71,12 @@ class SatImageDownloader:
         kuressaare_bbox = BBox(bbox=kuressaare_bbox_coords_wgs84, crs=CRS.WGS84)
         kuressaare_img_size = bbox_to_dimensions(kuressaare_bbox, resolution=resolution)
 
-        evalscript = "return [2.5 * B12, 2.5 * B11, 2.5 * B08]"
+        evalscript = "return [2.5 * B12, 2.5 * B04, 2.5 * B02]"
 
         request_true_color = SentinelHubRequest(evalscript=evalscript,
                                                 input_data=[SentinelHubRequest.input_data(
                                                     data_collection=DataCollection.SENTINEL2_L1C,
-                                                    time_interval=("2024-02-18", "2024-02-18"),
+                                                    time_interval=("2024-02-18", "2024-02-20"),
                                                 )],
                                                 responses=[SentinelHubRequest.output_response(
                                                     "default", MimeType.PNG)],
