@@ -79,7 +79,7 @@ class SatImageDownloader:
                                                     time_interval=("2024-02-18", "2024-02-20"),
                                                 )],
                                                 responses=[SentinelHubRequest.output_response(
-                                                    "default", MimeType.PNG)],
+                                                    "default", MimeType.TIFF)],
                                                 bbox=kuressaare_bbox,
                                                 size=kuressaare_img_size,
                                                 config=self.config
