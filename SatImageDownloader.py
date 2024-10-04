@@ -17,7 +17,7 @@ from sentinelhub import (
     SentinelHubRequest,
     MimeType,
     DownloadRequest,
-    bbox_to_dimensions)
+    bbox_to_dimensions, MosaickingOrder)
 from PIL import Image
 import matplotlib.pyplot as plt
 
@@ -73,10 +73,12 @@ class SatImageDownloader:
 
         evalscript = "return [2.5 * B12, 2.5 * B04, 2.5 * B02]"
 
-        request_true_color = SentinelHubRequest(evalscript=evalscript,
+        request_true_color = SentinelHubRequest(data_folder='downloaded_data',
+                                                evalscript=evalscript,
                                                 input_data=[SentinelHubRequest.input_data(
                                                     data_collection=DataCollection.SENTINEL2_L1C,
                                                     time_interval=("2024-02-18", "2024-02-20"),
+                                                    mosaicking_order=MosaickingOrder.LEAST_CC,
                                                 )],
                                                 responses=[SentinelHubRequest.output_response(
                                                     "default", MimeType.TIFF)],
@@ -85,7 +87,7 @@ class SatImageDownloader:
                                                 config=self.config
                                                 )
 
-        true_color_images = request_true_color.get_data()
+        true_color_images = request_true_color.get_data(save_data=True)
 
         image_1 = true_color_images[0]
 
