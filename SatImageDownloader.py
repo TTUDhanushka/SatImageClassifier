@@ -9,6 +9,7 @@ Created on: 2024-08-09
 
 import os
 import numpy as np
+import datetime
 from sentinelhub import (
     SHConfig,
     BBox,
@@ -23,7 +24,7 @@ import matplotlib.pyplot as plt
 
 
 class GeoPoint:
-    def __len__(self, latitude, longitude) -> None:
+    def __init__(self, latitude:float, longitude:float) -> None:
         self.latitude = latitude
         self.longitude = longitude
 
@@ -35,9 +36,8 @@ class GeoROI:
 
 
 class SatImageDownloader:
-    def __init__(self, source: str, download_folder: str) -> None:
+    def __init__(self, source: str) -> None:
         self.datasource = source
-        self.download_folder = download_folder
 
         self.service_url = 'https://services.sentinel-hub.com'
         self.sh_client_id = 'c9fc1bc1-8ff1-4c9c-8a54-1ca1d1342a1d'
@@ -45,6 +45,11 @@ class SatImageDownloader:
 
         # Credentials saved as a profile.
         self.profile = 'sentinel_data'
+
+        # Default initialization
+        self.resolution = 60
+        self.start_date = "2024-08-18"
+        self.end_date = "2024-08-22"
 
         self.config = self.get_config()
 
@@ -65,19 +70,34 @@ class SatImageDownloader:
 
         return config
 
-    def download_image_data(self):
-        resolution = 60
-        kuressaare_bbox_coords_wgs84 = (23.02, 58.69, 25.23, 57.95)
+    def set_resolution(self, resolution: int) -> None:
+        if self.resolution != resolution:
+            self.resolution = resolution
+
+    def set_date_range(self, start_date: datetime, end_date: datetime):
+        self.start_date = start_date
+        self.end_date = end_date
+
+    def download_image_data(self, top_left_coordinates: GeoPoint,
+                            bottom_right_coordinates: GeoPoint) -> None:
+
+        resolution = self.resolution
+
+        kuressaare_bbox_coords_wgs84 = (top_left_coordinates.longitude,
+                                        top_left_coordinates.latitude,
+                                        bottom_right_coordinates.longitude,
+                                        bottom_right_coordinates.latitude) # Longitude, Latitude
+
         kuressaare_bbox = BBox(bbox=kuressaare_bbox_coords_wgs84, crs=CRS.WGS84)
         kuressaare_img_size = bbox_to_dimensions(kuressaare_bbox, resolution=resolution)
 
-        evalscript = "return [2.5 * B12, 2.5 * B04, 2.5 * B02]"
+        evalscript = "return [2.5 * B04, 2.5 * B03, 2.5 * B02]"
 
         request_true_color = SentinelHubRequest(data_folder='downloaded_data',
                                                 evalscript=evalscript,
                                                 input_data=[SentinelHubRequest.input_data(
                                                     data_collection=DataCollection.SENTINEL2_L1C,
-                                                    time_interval=("2024-02-18", "2024-02-20"),
+                                                    time_interval=(self.start_date, self.end_date),
                                                     mosaicking_order=MosaickingOrder.LEAST_CC,
                                                 )],
                                                 responses=[SentinelHubRequest.output_response(
@@ -95,3 +115,4 @@ class SatImageDownloader:
 
         plt.imshow(pil_image)
         plt.show()
+
