@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ebbc212-e623-4d78-9c07-68f186139f22" name="Changes" comment="Distance calculation added.">
+    <list default="true" id="1ebbc212-e623-4d78-9c07-68f186139f22" name="Changes" comment="Implemented GUI">
       <change afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SatImageDownloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/SatImageDownloader.py" afterDir="false" />
@@ -121,7 +121,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728144842790</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Implemented GUI">
+      <option name="closed" value="true" />
+      <created>1728220570425</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1728220570425</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -139,7 +147,8 @@
     <MESSAGE value="Updated image type" />
     <MESSAGE value="Save data to a local folder." />
     <MESSAGE value="Distance calculation added." />
-    <option name="LAST_COMMIT_MESSAGE" value="Distance calculation added." />
+    <MESSAGE value="Implemented GUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented GUI" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

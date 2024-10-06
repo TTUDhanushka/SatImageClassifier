@@ -20,7 +20,7 @@ from sentinelhub import (
     DownloadRequest,
     bbox_to_dimensions, MosaickingOrder)
 from PIL import Image
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 class GeoPoint:
@@ -36,8 +36,7 @@ class GeoROI:
 
 
 class SatImageDownloader:
-    def __init__(self, source: str) -> None:
-        self.datasource = source
+    def __init__(self) -> None:
 
         self.service_url = 'https://services.sentinel-hub.com'
         self.sh_client_id = 'c9fc1bc1-8ff1-4c9c-8a54-1ca1d1342a1d'
@@ -79,7 +78,7 @@ class SatImageDownloader:
         self.end_date = end_date
 
     def download_image_data(self, top_left_coordinates: GeoPoint,
-                            bottom_right_coordinates: GeoPoint) -> None:
+                            bottom_right_coordinates: GeoPoint) -> Image:
 
         resolution = self.resolution
 
@@ -111,8 +110,7 @@ class SatImageDownloader:
 
         image_1 = true_color_images[0]
 
-        pil_image = Image.fromarray(image_1)
-
-        plt.imshow(pil_image)
-        plt.show()
-
+        # pil_image = Image.fromarray(image_1)
+        return image_1
+        # plt.imshow(pil_image)
+        # plt.show()

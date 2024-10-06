@@ -1,2 +1,6 @@
 sentinelhub
 lat-lon-parser
+mapwidget
+numpy
+pilow
+matplotlib
