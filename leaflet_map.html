@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map</title>
+    <link rel="stylesheet" href="leaflet/leaflet.css" />
+    <script src="leaflet/leaflet.js"></script>
+    <script src="qwebchannel.js"></script> <!-- PyQt WebChannel -->
+
+    <style>
+        #map {height: 100%; width: 100%}
+        html, body { height: 100%; margin: 0; padding: 0; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script>
+        var map = L.map('map').setView([58.23, 22.31], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 12,
+        }).addTo(map);
+
+        // Communication between javascript ad PyQt via QWebChannel
+        var pyObj = null;
+        if (typeof QWebChannel !== 'undefined') {
+            new QWebChannel(qt.webChannelTransport, function(channel) {
+                pyObj = channel.objects.pyObj;  // pyObj is the PyQt object
+            });
+        }
+
+        // Capture mouse events on the map
+        map.on('mousemove', function(e) {
+            var lat = e.latlng.lat.toFixed(6);
+            var lng = e.latlng.lng.toFixed(6);
+
+            // Send coordinates to PyQt via QWebChannel
+            if (pyObj) {
+                pyObj.updateCoordinates(lat, lng);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
-sentinelhub
-lat-lon-parser
-mapwidget
-numpy
-pilow
-matplotlib
+numpy~=2.1.1
+folium~=0.17.0
+PyQt6~=6.7.1
+pyproj~=3.7.0
+sentinelhub~=3.11.1
+pillow~=10.4.0
+PyQt5~=5.15.11

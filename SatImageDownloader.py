@@ -20,20 +20,7 @@ from sentinelhub import (
     DownloadRequest,
     bbox_to_dimensions, MosaickingOrder)
 from PIL import Image
-# import matplotlib.pyplot as plt
-
-
-class GeoPoint:
-    def __init__(self, latitude:float, longitude:float) -> None:
-        self.latitude = latitude
-        self.longitude = longitude
-
-
-class GeoROI:
-    def __init__(self, top_left: GeoPoint, bottom_right: GeoPoint) -> None:
-        self.top_left = top_left
-        self.bottom_right = bottom_right
-
+from geo_utils import GeoPoint
 
 class SatImageDownloader:
     def __init__(self) -> None:
@@ -47,6 +34,8 @@ class SatImageDownloader:
 
         # Default initialization
         self.resolution = 60
+        self.thumbnail_resolution = 60
+
         self.start_date = "2024-08-18"
         self.end_date = "2024-08-22"
 
@@ -61,8 +50,6 @@ class SatImageDownloader:
         config.sh_client_secret = self.sh_client_secret
 
         credential_status = True if config.sh_client_id or config.sh_client_secret else False
-
-        # config.
 
         if credential_status:
             config.save(self.profile)
@@ -80,15 +67,13 @@ class SatImageDownloader:
     def download_image_data(self, top_left_coordinates: GeoPoint,
                             bottom_right_coordinates: GeoPoint) -> Image:
 
-        resolution = self.resolution
-
-        kuressaare_bbox_coords_wgs84 = (top_left_coordinates.longitude,
+        roi_bbox_coords_wgs84 = (top_left_coordinates.longitude,
                                         top_left_coordinates.latitude,
                                         bottom_right_coordinates.longitude,
                                         bottom_right_coordinates.latitude) # Longitude, Latitude
 
-        kuressaare_bbox = BBox(bbox=kuressaare_bbox_coords_wgs84, crs=CRS.WGS84)
-        kuressaare_img_size = bbox_to_dimensions(kuressaare_bbox, resolution=resolution)
+        geo_bbox = BBox(bbox=roi_bbox_coords_wgs84, crs=CRS.WGS84)
+        satellite_img_size = bbox_to_dimensions(geo_bbox, resolution=self.resolution)
 
         evalscript = "return [2.5 * B04, 2.5 * B03, 2.5 * B02]"
 
@@ -101,16 +86,44 @@ class SatImageDownloader:
                                                 )],
                                                 responses=[SentinelHubRequest.output_response(
                                                     "default", MimeType.TIFF)],
-                                                bbox=kuressaare_bbox,
-                                                size=kuressaare_img_size,
+                                                bbox=geo_bbox,
+                                                size=satellite_img_size,
                                                 config=self.config
                                                 )
 
         true_color_images = request_true_color.get_data(save_data=True)
 
-        image_1 = true_color_images[0]
+        downloaded_sat_image = true_color_images[0]
+        return downloaded_sat_image
 
-        # pil_image = Image.fromarray(image_1)
-        return image_1
-        # plt.imshow(pil_image)
-        # plt.show()
+
+    def download_preview_thumbnail(self, top_left_coordinates: GeoPoint,
+                            bottom_right_coordinates: GeoPoint):
+
+        roi_bbox_coords_wgs84 = (top_left_coordinates.longitude,
+                                        top_left_coordinates.latitude,
+                                        bottom_right_coordinates.longitude,
+                                        bottom_right_coordinates.latitude)  # Longitude, Latitude
+
+        geo_bbox = BBox(bbox=roi_bbox_coords_wgs84, crs=CRS.WGS84)
+        satellite_img_size = bbox_to_dimensions(geo_bbox, resolution=self.thumbnail_resolution)
+
+        evalscript = "return [2.5 * B04, 2.5 * B03, 2.5 * B02]"
+
+        request_true_color = SentinelHubRequest(evalscript=evalscript,
+                                                input_data=[SentinelHubRequest.input_data(
+                                                    data_collection=DataCollection.SENTINEL2_L1C,
+                                                    time_interval=(self.start_date, self.end_date),
+                                                    mosaicking_order=MosaickingOrder.LEAST_CC,
+                                                )],
+                                                responses=[SentinelHubRequest.output_response(
+                                                    "default", MimeType.PNG)],
+                                                bbox=geo_bbox,
+                                                size=satellite_img_size,
+                                                config=self.config
+                                                )
+
+        true_color_images = request_true_color.get_data(save_data=False)
+
+        downloaded_sat_image = true_color_images[0]
+        return downloaded_sat_image
