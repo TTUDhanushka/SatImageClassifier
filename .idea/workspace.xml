@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ebbc212-e623-4d78-9c07-68f186139f22" name="Changes" comment="Implemented GUI">
-      <change afterPath="$PROJECT_DIR$/geo_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/leaflet_map.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_gui.py" afterDir="false" />
+    <list default="true" id="1ebbc212-e623-4d78-9c07-68f186139f22" name="Changes" comment="Replaced folium with leaflet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SatImageDownloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/SatImageDownloader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/leaflet_map.html" beforeDir="false" afterPath="$PROJECT_DIR$/leaflet_map.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +144,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728231027177</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Replaced folium with leaflet">
+      <option name="closed" value="true" />
+      <created>1728380215246</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1728380215246</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -168,7 +171,8 @@
     <MESSAGE value="Save data to a local folder." />
     <MESSAGE value="Distance calculation added." />
     <MESSAGE value="Implemented GUI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented GUI" />
+    <MESSAGE value="Replaced folium with leaflet" />
+    <option name="LAST_COMMIT_MESSAGE" value="Replaced folium with leaflet" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

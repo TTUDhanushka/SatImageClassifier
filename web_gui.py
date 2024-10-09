@@ -15,7 +15,6 @@ from lat_lon_parser import parse
 from geo_utils import GeoPoint, GeoCalcs
 
 
-
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -42,13 +41,6 @@ class MainWindow(QWidget):
 
 
 
-
-        self.mouse_coord = QLabel()
-
-        # Channel receiver
-        self.channel = QWebChannel(self.web_engine_view.page())
-        self.pyqt_handler = CoordinateReceiver(self.mouse_coord)
-        self.channel.registerObject('pyObj', self.pyqt_handler)
 
 
         self.calc_width_btn = QPushButton("Get Width")
@@ -79,7 +71,7 @@ class MainWindow(QWidget):
         self.geo_location_lat = QLineEdit()
         place_holder_lat = "58°16'21.29N"
         self.geo_location_lat.setPlaceholderText(place_holder_lat)
-        self.geo_location_lat.textChanged.connect(self.geo_lat_changed_callback)
+        # self.geo_location_lat.textChanged.connect(self.geo_lat_changed_callback)
         self.geo_location_lat.setFixedSize(label_width, label_height)
 
         self.longitude_label = QLabel("Longitude")
@@ -88,7 +80,7 @@ class MainWindow(QWidget):
         self.geo_location_lon = QLineEdit()
         place_holder_lon = "22°13'58.72E"
         self.geo_location_lon.setPlaceholderText(place_holder_lon)
-        self.geo_location_lon.textChanged.connect(self.geo_lon_changed_callback)
+        # self.geo_location_lon.textChanged.connect(self.geo_lon_changed_callback)
         self.geo_location_lon.setFixedSize(label_width, label_height)
 
         location_inputs_grid.addWidget(self.latitude_label, 0, 0)
@@ -97,6 +89,13 @@ class MainWindow(QWidget):
         location_inputs_grid.addWidget(self.geo_location_lon, 1, 1)
         geo_location_group.setLayout(location_inputs_grid)
 
+
+        self.mouse_coord = QLabel()
+
+        # Channel receiver
+        self.channel = QWebChannel(self.web_engine_view.page())
+        self.pyqt_handler = CoordinateReceiver(self.geo_location_lat, self.geo_location_lon)
+        self.channel.registerObject('pyObj', self.pyqt_handler)
 
         # Date range boxes
         date_range_group = QGroupBox("Date range")
@@ -159,25 +158,14 @@ class MainWindow(QWidget):
         self.show()
 
     def update_map(self):
-        # self.map_request = folium.Map(
-        #     location=[self.center_latitude, self.center_longitude],
-        #     zoom_start=10
-        # )
-        #
-        # data = io.BytesIO()
-        # self.map_request.save(data, close_file=False)
-        #
-        # self.web_engine_view.setHtml(data.getvalue().decode())
-
         abs_html_path = '/home/dhanushka/Developments/SatImageClassifier/leaflet_map.html'
 
-        if os.path.exists(abs_html_path):
-            print(f"file exists")
-        else:
-            print(f"File not exist")
+        # if os.path.exists(abs_html_path):
+        #     print(f"file exists")
+        # else:
+        #     print(f"File not exist")
 
         self.web_engine_view.setUrl(QUrl.fromLocalFile(os.path.abspath(abs_html_path )))
-        # self.web_engine_view.setHtml(abs_html_path)
         self.web_engine_view.page().setWebChannel(self.channel)
 
     def update_preview(self, image):
@@ -187,15 +175,15 @@ class MainWindow(QWidget):
 
         self.sat_image_holder.setPixmap(pixmap)
 
-    def geo_lon_changed_callback(self, text):
-        updated_coordinate = parse(text)
-        self.center_longitude = updated_coordinate
-        self.update_map()
+    # def geo_lon_changed_callback(self, text):
+    #     updated_coordinate = parse(text)
+    #     self.center_longitude = updated_coordinate
+    #     self.update_map()
 
-    def geo_lat_changed_callback(self, text):
-        updated_coordinate = parse(text)
-        self.center_latitude = updated_coordinate
-        self.update_map()
+    # def geo_lat_changed_callback(self, text):
+    #     updated_coordinate = parse(text)
+    #     self.center_latitude = updated_coordinate
+    #     self.update_map()
 
     def end_date_changed_callback(self, date):
         self.sat_image_query_end = date.toString('yyyy-MM-dd')
@@ -236,15 +224,17 @@ class MainWindow(QWidget):
 
 
 class CoordinateReceiver(QObject):
-    def __init__(self, label):
+    def __init__(self, label_lat, label_lon):
         super().__init__()
 
-        self.label = label
+        self.label_lat = label_lat
+        self.label_lon = label_lon
 
     @pyqtSlot(str, str)
     def updateCoordinates(self, lat, lng):
         # print(f"Coordinates: {lat}, {lng}")
-        self.label.setText(f"Coordinates: {lat}, {lng}")
+        self.label_lat.setText(f"{lat}")
+        self.label_lon.setText(f"{lng}")
 
 def run_gui():
     app = QApplication(sys.argv)
