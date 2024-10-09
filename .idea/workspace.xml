@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ebbc212-e623-4d78-9c07-68f186139f22" name="Changes" comment="Replaced folium with leaflet">
+    <list default="true" id="1ebbc212-e623-4d78-9c07-68f186139f22" name="Changes" comment="Updated the javascript files.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SatImageDownloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/SatImageDownloader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/downloaded_data/fbc0225837115fabdd5220359264f8b7/request.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/downloaded_data/fbc0225837115fabdd5220359264f8b7/response.tiff" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/leaflet_map.html" beforeDir="false" afterPath="$PROJECT_DIR$/leaflet_map.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -152,7 +156,23 @@
       <option name="project" value="LOCAL" />
       <updated>1728380215246</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Updated the javascript files.">
+      <option name="closed" value="true" />
+      <created>1728473892410</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1728473892410</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Updated the javascript files.">
+      <option name="closed" value="true" />
+      <created>1728474078179</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1728474078179</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -172,7 +192,8 @@
     <MESSAGE value="Distance calculation added." />
     <MESSAGE value="Implemented GUI" />
     <MESSAGE value="Replaced folium with leaflet" />
-    <option name="LAST_COMMIT_MESSAGE" value="Replaced folium with leaflet" />
+    <MESSAGE value="Updated the javascript files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated the javascript files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

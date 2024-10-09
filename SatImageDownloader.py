@@ -34,7 +34,7 @@ class SatImageDownloader:
 
         # Default initialization
         self.resolution = 60
-        self.thumbnail_resolution = 60
+        self.thumbnail_resolution = 15
 
         self.start_date = "2024-08-18"
         self.end_date = "2024-08-22"
@@ -56,7 +56,7 @@ class SatImageDownloader:
 
         return config
 
-    def set_resolution(self, resolution: int) -> None:
+    def set_resolution(self, resolution: float) -> None:
         if self.resolution != resolution:
             self.resolution = resolution
 
