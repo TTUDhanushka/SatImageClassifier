@@ -6,7 +6,7 @@
 from threading import Thread
 import sys
 from PyQt5.QtWidgets import QApplication
-from web_gui import run_gui, MainWindow
+from web_gui import MainWindow
 
 def main():
 

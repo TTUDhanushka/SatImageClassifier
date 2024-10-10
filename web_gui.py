@@ -10,6 +10,7 @@ from PyQt5 import QtWebEngineWidgets
 from PyQt5.QtGui import QPixmap, QImage, QFont
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QVBoxLayout, QLineEdit, QApplication, QDateEdit, \
     QGroupBox, QGridLayout
+from PyQt5.QtWebEngineCore import QWebEngineUrlScheme, QWebEngineUrlRequestJob, QWebEngineUrlSchemeHandler
 from SatImageDownloader import SatImageDownloader
 from lat_lon_parser import parse
 from geo_utils import GeoPoint, GeoCalcs
@@ -44,6 +45,12 @@ class MainWindow(QWidget):
         label_width = 180
 
         self.image_sat = np.zeros((480, 480), dtype=np.uint8)
+
+        # For serving register URL scheme
+        # Register a custom URL scheme
+        scheme = QWebEngineUrlScheme(b"SatImageClassifier")
+        scheme.setFlags(QWebEngineUrlScheme.LocalScheme)
+        QWebEngineUrlScheme.registerScheme(scheme)
 
         self.web_engine_view = QtWebEngineWidgets.QWebEngineView()
         self.web_engine_view.resize(480, 480)
@@ -161,8 +168,23 @@ class MainWindow(QWidget):
         self.show()
 
     def update_map(self):
+
+        # For serving
+
+
+        # Install the URL scheme handler
+        handler = LocalFileSchemeHandler()
+        self.web_engine_view.page().profile().installUrlSchemeHandler(b"SatImageClassifier", handler)
+
+        # Step 3: Load the HTML file via the custom scheme
+        html_file_path = os.path.abspath("leaflet_map.html")  # Your HTML file
+        # html_url = QUrl(f"SatImageClassifier://{html_file_path}")
+        html_url = QUrl(f"http://localhost:8000/leaflet_map.html")
+
+        # Old content
         abs_html_path = '/home/dhanushka/Developments/SatImageClassifier/leaflet_map.html'
-        self.web_engine_view.setUrl(QUrl.fromLocalFile(os.path.abspath(abs_html_path )))
+        # self.web_engine_view.setUrl(QUrl.fromLocalFile(os.path.abspath(abs_html_path )))
+        self.web_engine_view.setUrl(html_url)
         self.web_engine_view.page().setWebChannel(self.channel)
 
     def update_preview(self, image):
@@ -224,10 +246,35 @@ class MainWindow(QWidget):
         coordinates = [self.current_lat, self.current_lng]
         self.coordinate_pairs.append(coordinates)
 
-        metadata_obj = json.dumps(self.meta_records)
+        file_name = 'metadata.json'
+        file_data = None
 
-        with open("metadata.json", "w") as outfile:
-            outfile.write(metadata_obj)
+
+        if os.path.exists(file_name):
+            with open(file_name, 'r+') as input_file:
+                file_data = json.load(input_file)
+                # print(f"File content {file_data}")
+
+                if file_data is not None:
+                    coords_list = file_data['coordinates']
+
+                    # updated_coordinates = self.meta_records['coordinates']
+                    # for coord_pair in updated_coordinates:
+                    coords_list.append(coordinates)
+
+                    self.meta_records['coordinates'] = coords_list
+                    input_file.seek(0)
+                    json.dump(file_data, input_file)
+                    # print(f"Coordinates list {coords_list}")
+                    input_file.close()
+
+        else:
+            metadata_obj = json.dumps(self.meta_records)
+
+            with open("metadata.json", "w") as outfile:
+                outfile.write(metadata_obj)
+
+                outfile.close()
 
 class CoordinateReceiver(QObject):
     def __init__(self, label_lat, label_lon):
@@ -241,7 +288,18 @@ class CoordinateReceiver(QObject):
         self.label_lat.setText(f"{lat}")
         self.label_lon.setText(f"{lng}")
 
-def run_gui():
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    sys.exit(app.exec())
+
+class LocalFileSchemeHandler(QWebEngineUrlSchemeHandler):
+    def requestStarted(self, job: QWebEngineUrlRequestJob):
+        # Extract the requested file path from the custom scheme
+        url = job.requestUrl().toString()
+        local_file_path = url.replace("SatImageClassifier://", "")  # Remove custom scheme
+        local_file_path = os.path.abspath(local_file_path)
+
+        if os.path.exists(local_file_path):
+            # Serve the local file by responding to the request
+            with open(local_file_path, "rb") as file:
+                file_data = file.read()
+                job.reply(b"text/html", file_data)  # Adjust MIME type as needed
+        else:
+            job.fail(QWebEngineUrlRequestJob.UrlInvalid)
