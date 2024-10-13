@@ -75,7 +75,7 @@ class SatImageDownloader:
         geo_bbox = BBox(bbox=roi_bbox_coords_wgs84, crs=CRS.WGS84)
         satellite_img_size = bbox_to_dimensions(geo_bbox, resolution=self.resolution)
 
-        evalscript = "return [2.5 * B04, 2.5 * B03, 2.5 * B02]"
+        evalscript = "return [2.5 * B08, 2.5 * B06, 2.5 * B12]"
 
         request_true_color = SentinelHubRequest(data_folder='downloaded_data',
                                                 evalscript=evalscript,
