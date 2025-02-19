@@ -26,8 +26,8 @@ class SatImageDownloader:
     def __init__(self) -> None:
 
         self.service_url = 'https://services.sentinel-hub.com'
-        self.sh_client_id = 'c9fc1bc1-8ff1-4c9c-8a54-1ca1d1342a1d'
-        self.sh_client_secret = 'mpF1veLus2oQoKr9BoN4CfWsRrno4VUN'
+        self.sh_client_id = 'a4f60b54-1651-45b6-859f-e0bbe68e946e'
+        self.sh_client_secret = '3tkSRbFzn9JoFQr5stvlNXW63YOJy4PB'
 
         # Credentials saved as a profile.
         self.profile = 'sentinel_data'
