@@ -26,6 +26,8 @@ class MainWindow(QWidget):
         self.center_latitude = 58.2
         self.center_longitude = 22.2
 
+        self.center_point = None
+
         self.sat_image_resolution = 10.5
         self.coordinate_pairs = []
 
@@ -225,22 +227,24 @@ class MainWindow(QWidget):
             self.current_lng = float(self.geo_location_lon.text())
 
         if abs(self.current_lng) > 0 and abs(self.current_lat) > 0:
-            center_point = GeoPoint(self.current_lat , self.current_lng)
+            self.center_point = GeoPoint(self.current_lat , self.current_lng)
 
-            # Get the next geo coordinates pair in 5632 meters.
-            _, top_left_lat, _ = GeoCalcs.get_next_coords_in_a_distance(center_point, 0, 2785)
-            _, btm_right_lat, _ = GeoCalcs.get_next_coords_in_a_distance(center_point, 180, 2785)
-
-            top_left_lon, _, _ = GeoCalcs.get_next_coords_in_a_distance(center_point, 90, 2900)
-            btm_right_lon, _, _ = GeoCalcs.get_next_coords_in_a_distance(center_point, 270, 2900)
-
-            self.top_left_roi = GeoPoint(top_left_lat, top_left_lon)
-            self.btm_right_roi = GeoPoint(btm_right_lat, btm_right_lon)
+            # # Get the next geo coordinates pair in 5632 meters.
+            # _, top_left_lat, _ = GeoCalcs.get_next_coords_in_a_distance(center_point, 0, 2785)
+            # _, btm_right_lat, _ = GeoCalcs.get_next_coords_in_a_distance(center_point, 180, 2785)
+            #
+            # top_left_lon, _, _ = GeoCalcs.get_next_coords_in_a_distance(center_point, 90, 2900)
+            # btm_right_lon, _, _ = GeoCalcs.get_next_coords_in_a_distance(center_point, 270, 2900)
+            #
+            # self.top_left_roi = GeoPoint(top_left_lat, top_left_lon)
+            # self.btm_right_roi = GeoPoint(btm_right_lat, btm_right_lon)
 
     def image_download_btn_callback(self):
-        _ = self.sat_img.download_image_data(self.top_left_roi, self.btm_right_roi)
+        # _ = self.sat_img.download_image_data(self.top_left_roi, self.btm_right_roi)
+        _ = self.sat_img.download_image_data(self.center_point)
 
-        self.image_sat = self.sat_img.download_preview_thumbnail(self.top_left_roi, self.btm_right_roi)
+        # self.image_sat = self.sat_img.download_preview_thumbnail(self.top_left_roi, self.btm_right_roi)
+        self.image_sat = self.sat_img.download_preview_thumbnail(self.center_point)
         self.update_preview(self.image_sat )
 
         coordinates = [self.current_lat, self.current_lng]
@@ -248,7 +252,6 @@ class MainWindow(QWidget):
 
         file_name = 'metadata.json'
         file_data = None
-
 
         if os.path.exists(file_name):
             with open(file_name, 'r+') as input_file:
